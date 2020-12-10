@@ -22,14 +22,15 @@ def list_games(objects):
 @api_view(['GET', 'POST'])
 def game_list(request):
     games = Game.objects.all()
-    game_listed = list_games(GameSerializer(games, many=True).data)
-    game_serializer = GameSerializer(data=request.data)
 
     if request.method == 'GET':
         game_serializer = GameSerializer(games, many=True)
         return Response(game_serializer.data)
 
     elif request.method == 'POST':
+        game_serializer = GameSerializer(data=request.data)
+        game_listed = list_games(GameSerializer(games, many=True).data)
+        
         if game_serializer.is_valid():
             name = request.data['name']
             if name in game_listed:
